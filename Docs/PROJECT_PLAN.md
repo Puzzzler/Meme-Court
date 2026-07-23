@@ -221,6 +221,7 @@ Move them into sprints later.
 - Multiple meme channels or server support.
 - Custom court-themed messages and random verdict lines.
 - Ties are handled by the monthly meme king winner when a meme has both the same number of thumbs up and thumbs down. (Could be more exciting if the tie breaker is asked "even or odd" and says one and then the bot rolls a dice and if it matches what the tie breaker said the meme is saved, and if not the meme poster gets the punishment)
+- Detect eligible meme posts and ignore ordinary conversation. (implemented into Sprint 1)
 
 
 
@@ -268,6 +269,12 @@ Use Meme Jail instead of Discord timeout. (current theory is giving them a tempo
 
 Reason:
 Less disruptive and funnier.
+
+Decision:
+Sprint 1 meme eligibility is limited to uploaded image attachments.
+
+Reason:
+Prevents casual conversation from being judged and keeps the meme channel focused on actual meme posts.
 
 # Not Yet
 
