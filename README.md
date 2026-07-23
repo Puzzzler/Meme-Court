@@ -2,6 +2,8 @@
 
 A Discord bot that lets the community vote on memes and delivers hilarious verdicts.
 
+This project is fun because it combines programming, humor, community, and making small experiences that people enjoy.
+
 ---
 
 ## Requirements
