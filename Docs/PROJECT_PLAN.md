@@ -222,7 +222,7 @@ Move them into sprints later.
 - Custom court-themed messages and random verdict lines.
 - Ties are handled by the monthly meme king winner when a meme has both the same number of thumbs up and thumbs down. (Could be more exciting if the tie breaker is asked "even or odd" and says one and then the bot rolls a dice and if it matches what the tie breaker said the meme is saved, and if not the meme poster gets the punishment)
 - Detect eligible meme posts and ignore ordinary conversation. (implemented into Sprint 1)
-
+- Give users that post memes fake currenacy or a total score of 'thumbs up reactions - thumbs down reactions = total score' and that is one way we can handle the leaderboard.
 
 
 ---

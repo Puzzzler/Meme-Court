@@ -44,22 +44,57 @@ Codex checkpoint: Ask Codex to implement this sprint from a written acceptance c
 Suggested commit: "Complete Sprint 1: Open Meme Court"
 
 
-Sprint 2: Basic Voting Rules
-Goal: Treat 👍 and 👎 as valid votes and reject obvious vote abuse.
-Build tasks
-☐ Detect reaction additions and removals.
-☐ Ignore reactions from bots.
-☐ Ignore reactions other than 👍 and 👎.
-☐ Prevent a meme author from voting on their own post.
-☐ Decide and implement whether a member may hold both reactions or must choose only one.
-☐ Log useful vote activity to the terminal while developing.
-Acceptance checks
-☐ Bot reactions are not counted as member votes.
-☐ Self-votes are removed or ignored.
-☐ Switching votes behaves according to the chosen rule.
-☐ Removing a reaction updates the current vote state.
-Codex checkpoint: Use Codex for test-case generation. Give it the voting rules and ask for edge cases before asking it to write code.
-Suggested commit: "Complete Sprint 2: Basic Voting Rules"
+# Sprint 2: Basic Voting Rules
+
+## Goal
+
+Treat thumbs-up and thumbs-down as valid votes while preventing obvious vote abuse.
+
+## Voting Rules
+
+- Only thumbs-up and thumbs-down are voting reactions.
+- Only human reactions count.
+- Meme authors cannot vote on their own submission.
+- Self-votes are removed.
+- A member may hold only one vote per meme.
+- Adding the opposite reaction switches the member's vote.
+- Removing the current reaction clears the member's vote.
+- Other emojis are left untouched.
+- Rules apply only to eligible Sprint 1 meme submissions.
+- Discord reactions are the source of current vote state.
+- No database persistence is required until Sprint 3.
+
+## Build Tasks
+
+- [ ] Detect raw reaction additions.
+- [ ] Detect raw reaction removals.
+- [ ] Ignore reactions from bots.
+- [ ] Ignore reactions other than thumbs-up and thumbs-down.
+- [ ] Confirm the reacted message is an eligible meme submission.
+- [ ] Remove self-votes.
+- [ ] Remove the user's opposite vote when switching.
+- [ ] Log useful vote activity during development.
+- [ ] Handle deleted messages and missing permissions without crashing.
+
+## Acceptance Checks
+
+- [ ] The bot's starter reactions are not treated as votes.
+- [ ] Other bots' reactions are ignored.
+- [ ] Self-votes are removed.
+- [ ] A member cannot visibly hold both voting reactions.
+- [ ] Adding the opposite reaction switches the vote.
+- [ ] Removing the current reaction clears the vote.
+- [ ] Unrelated emoji reactions remain untouched.
+- [ ] The bot survives missing messages and permission errors.
+- [ ] Restarting the bot does not remove existing Discord reactions.
+
+## Codex Checkpoint
+
+Give Codex the finalized voting rules and ask it to generate test cases and edge cases only. Do not allow file edits yet.
+
+## Suggested Commit
+
+Complete Sprint 2: Basic Voting Rules
 
 
 Sprint 3: Persistent Case Files
