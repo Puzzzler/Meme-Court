@@ -36,6 +36,23 @@ Examples:
 
 ---
 
+### Data Philosophy
+
+Store facts, calculate results.
+created_at and updated_at are stored in UTC.
+
+Examples of facts:
+- A meme was posted by a specific user at a specific time.
+- A user currently has a thumbs-up or thumbs-down vote on a meme.
+
+Examples of calculated results:
+- Total thumbs-up votes.
+- Total thumbs-down votes.
+- Net meme score.
+- Monthly ranking.
+
+---
+
 # Features
 
 ## MVP
