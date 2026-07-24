@@ -75,6 +75,7 @@ In the Discord Developer Portal:
    - View the meme channel
    - Read message history
    - Add reactions
+   - Manage messages
 
 ## Sprint 1 Behavior
 

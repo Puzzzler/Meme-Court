@@ -223,6 +223,7 @@ Move them into sprints later.
 - Ties are handled by the monthly meme king winner when a meme has both the same number of thumbs up and thumbs down. (Could be more exciting if the tie breaker is asked "even or odd" and says one and then the bot rolls a dice and if it matches what the tie breaker said the meme is saved, and if not the meme poster gets the punishment)
 - Detect eligible meme posts and ignore ordinary conversation. (implemented into Sprint 1)
 - Give users that post memes fake currenacy or a total score of 'thumbs up reactions - thumbs down reactions = total score' and that is one way we can handle the leaderboard.
+- Reconcile rapid/concurrent vote changes against Discord's final reaction state.
 
 
 ---
@@ -275,6 +276,12 @@ Sprint 1 meme eligibility is limited to uploaded image attachments.
 
 Reason:
 Prevents casual conversation from being judged and keeps the meme channel focused on actual meme posts.
+
+Decision:
+Allow meme authors to vote on their own submissions.
+
+Reason:
+Reaction Jury is a fun community feature, not a strict election system. Allowing one self-vote keeps the rules simpler, encourages engagement, and removes unnecessary special-case logic.
 
 # Not Yet
 

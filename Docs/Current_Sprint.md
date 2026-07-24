@@ -8,8 +8,8 @@ Treat thumbs-up and thumbs-down as valid votes while preventing obvious vote abu
 
 - Only thumbs-up and thumbs-down are voting reactions.
 - Only human reactions count.
-- Meme authors cannot vote on their own submission.
-- Self-votes are removed.
+- Meme authors may vote on their own submission.
+- Every human member gets one vote per eligible meme.
 - A member may hold only one vote per meme.
 - Adding the opposite reaction switches the member's vote.
 - Removing the current reaction clears the member's vote.
@@ -25,7 +25,6 @@ Treat thumbs-up and thumbs-down as valid votes while preventing obvious vote abu
 - [ ] Ignore reactions from bots.
 - [ ] Ignore reactions other than thumbs-up and thumbs-down.
 - [ ] Confirm the reacted message is an eligible meme submission.
-- [ ] Remove self-votes.
 - [ ] Remove the user's opposite vote when switching.
 - [ ] Log useful vote activity during development.
 - [ ] Handle deleted messages and missing permissions without crashing.
@@ -34,7 +33,6 @@ Treat thumbs-up and thumbs-down as valid votes while preventing obvious vote abu
 
 - [ ] The bot's starter reactions are not treated as votes.
 - [ ] Other bots' reactions are ignored.
-- [ ] Self-votes are removed.
 - [ ] A member cannot visibly hold both voting reactions.
 - [ ] Adding the opposite reaction switches the vote.
 - [ ] Removing the current reaction clears the vote.
@@ -69,7 +67,8 @@ For each test case, provide:
 Rules:
 - Only thumbs-up and thumbs-down are voting reactions.
 - Only humans may vote.
-- Meme authors cannot vote on their own submission; remove self-votes.
+- Meme authors may vote on their own submission.
+- Every human member gets one vote per eligible meme.
 - A member may hold only one vote per meme.
 - Adding the opposite reaction switches the vote.
 - Removing the current reaction clears the vote.
