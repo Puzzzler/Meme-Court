@@ -1,5 +1,7 @@
 import os
 
+import sqlite3
+
 import discord
 from discord import app_commands
 from dotenv import load_dotenv
@@ -36,6 +38,7 @@ client = discord.Client(intents=intents)
 # Create a command tree for slash commands
 tree = app_commands.CommandTree(client)
 
+DATABASE_PATH = "reaction_jury.db"
 VOTE_REACTIONS = ("\N{THUMBS UP SIGN}", "\N{THUMBS DOWN SIGN}")
 PING_RESPONSE = "\N{TABLE TENNIS PADDLE AND BALL} Pong"
 SUPPORTED_IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp")
@@ -43,6 +46,49 @@ SUPPORTED_IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".webp")
 # Tracks reaction removals initiated by Reaction Jury itself.
 # This prevents a vote switch from also being logged as a normal vote removal.
 BOT_REMOVALS: set[tuple[int, int, str]] = set()
+
+
+def setup_database() -> None:
+    with sqlite3.connect(DATABASE_PATH) as connection:
+        connection.execute("PRAGMA foreign_keys = ON;")
+
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS meme_submissions (
+                message_id INTEGER PRIMARY KEY,
+                guild_id INTEGER NOT NULL,
+                channel_id INTEGER NOT NULL,
+                author_id INTEGER NOT NULL,
+                created_at TEXT NOT NULL
+            );
+            """
+        )
+
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS current_votes (
+                message_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                vote TEXT NOT NULL,
+                updated_at TEXT NOT NULL,
+
+                PRIMARY KEY (message_id, user_id),
+
+                FOREIGN KEY (message_id)
+                    REFERENCES meme_submissions (message_id)
+                    ON DELETE CASCADE,
+
+                CHECK (vote IN ('up', 'down'))
+            );
+            """
+        )
+
+        connection.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_meme_submissions_created_at
+            ON meme_submissions (created_at);
+            """
+        )
 
 
 def is_supported_image_upload(attachment: discord.Attachment) -> bool:
@@ -284,4 +330,5 @@ async def ping(interaction: discord.Interaction):
     await interaction.response.send_message(PING_RESPONSE)
 
 
+setup_database()
 client.run(TOKEN)
