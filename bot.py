@@ -1,5 +1,4 @@
 import os
-
 import sqlite3
 
 import discord
@@ -91,6 +90,45 @@ def setup_database() -> None:
         )
 
 
+def save_meme_submission(message: discord.Message) -> None:
+    if message.guild is None:
+        return
+
+    created_at = message.created_at.isoformat()
+
+    try:
+        with sqlite3.connect(DATABASE_PATH) as connection:
+            connection.execute("PRAGMA foreign_keys = ON;")
+
+            connection.execute(
+                """
+                INSERT OR IGNORE INTO meme_submissions (
+                    message_id,
+                    guild_id,
+                    channel_id,
+                    author_id,
+                    created_at
+                )
+                VALUES (?, ?, ?, ?, ?);
+                """,
+                (
+                    message.id,
+                    message.guild.id,
+                    message.channel.id,
+                    message.author.id,
+                    created_at,
+                ),
+            )
+
+        print(f"Meme saved: message={message.id}")
+
+    except sqlite3.Error as error:
+        print(
+            f"Could not save meme submission: "
+            f"message={message.id} error={error}"
+        )
+
+
 def is_supported_image_upload(attachment: discord.Attachment) -> bool:
     content_type = attachment.content_type or ""
 
@@ -127,6 +165,8 @@ async def on_message(message: discord.Message):
 
     if not is_meme_submission(message):
         return
+
+    save_meme_submission(message)
 
     try:
         for reaction in VOTE_REACTIONS:
