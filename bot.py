@@ -129,6 +129,78 @@ def save_meme_submission(message: discord.Message) -> None:
         )
 
 
+def save_current_vote(
+    message_id: int,
+    user_id: int,
+    vote: str,
+) -> bool:
+    try:
+        with sqlite3.connect(DATABASE_PATH) as connection:
+            connection.execute("PRAGMA foreign_keys = ON;")
+
+            connection.execute(
+                """
+                INSERT INTO current_votes (
+                    message_id,
+                    user_id,
+                    vote,
+                    updated_at
+                )
+                VALUES (?, ?, ?, ?)
+
+                ON CONFLICT (message_id, user_id)
+                DO UPDATE SET
+                    vote = excluded.vote,
+                    updated_at = excluded.updated_at;
+                """,
+                (
+                    message_id,
+                    user_id,
+                    vote,
+                    discord.utils.utcnow().isoformat(),
+                ),
+            )
+
+        return True
+
+    except sqlite3.Error as error:
+        print(
+            f"Could not save vote: "
+            f"message={message_id} user={user_id} error={error}"
+        )
+        return False
+            
+
+def delete_current_vote(
+    message_id: int,
+    user_id: int,
+) -> bool:
+    try:
+        with sqlite3.connect(DATABASE_PATH) as connection:
+            connection.execute("PRAGMA foreign_keys = ON;")
+
+            connection.execute(
+                """
+                DELETE FROM current_votes
+                WHERE message_id = ?
+                AND user_id = ?;
+                """,
+                (
+                    message_id,
+                    user_id,
+                ),
+            )
+
+        return True
+
+    except sqlite3.Error as error:
+        print(
+            f"Could not delete vote: "
+            f"message={message_id} user={user_id} error={error}"
+        )
+        return False
+
+
 def is_supported_image_upload(attachment: discord.Attachment) -> bool:
     content_type = attachment.content_type or ""
 
@@ -229,7 +301,14 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     if not is_meme_submission(message):
         return
 
+    save_meme_submission(message)
+
     current_vote = str(payload.emoji)
+
+    if current_vote == VOTE_REACTIONS[0]:
+        database_vote = "up"
+    else:
+        database_vote = "down"
 
     if current_vote == VOTE_REACTIONS[0]:
         opposite_vote = VOTE_REACTIONS[1]
@@ -266,6 +345,13 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
                         BOT_REMOVALS.discard(removal_key)
                         print(f"Could not switch vote: {error}")
                         return
+                    
+                    if not save_current_vote(
+                        payload.message_id,
+                        payload.user_id,
+                        database_vote,
+                    ):
+                        return
 
                     print(
                         f"Vote switched: user={payload.user_id} "
@@ -280,6 +366,13 @@ async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
                 f"message={payload.message_id} error={error}"
             )
             return
+
+    if not save_current_vote(
+        payload.message_id,
+        payload.user_id,
+        database_vote,
+    ):
+        return
 
     print(
         f"Vote added: user={payload.user_id} "
@@ -356,6 +449,12 @@ async def on_raw_reaction_remove(payload: discord.RawReactionActionEvent):
         return
 
     if not is_meme_submission(message):
+        return
+
+    if not delete_current_vote(
+        payload.message_id,
+        payload.user_id,
+    ):
         return
 
     print(
